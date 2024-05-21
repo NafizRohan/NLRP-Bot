@@ -1,0 +1,32 @@
+name: Discord Webhook
+
+on: [push]
+ 
+jobs:
+  git:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - name: Get current time
+      uses: josStorer/get-current-time@v2.0.2
+      id: current-time
+      with:
+        format: X
+        utcOffset: "+06:00"
+
+    - name: Discord Commits
+      uses: Sniddl/discord-commits@v1.5
+      with:
+        webhook: "https://discord.com/api/webhooks/1188770237613609110/H4xEFEqjuXamA-dNL44lTwIJ61ZqebxZrMC8NwQbq0RNtFyfAy8yUI8IIOZsPBYOOg1U"
+        message: "New update @here"
+        embed: '{"title":"Updated by {{ commit.author.username }}",
+          "thumbnail": {
+          "url": "https://media.discordapp.net/attachments/1192082796689248377/1192355981083029555/NewLifeRP.png?ex=65cdb10a&is=65bb3c0a&hm=8d1963f08448bec71405375bc65bbcfde9cb2f816bb8176b5a890c2c8c17f325&=&format=webp&quality=lossless&width=473&height=473"},
+          "color":"10824007",
+          "description":"{{ commit.title }}",
+          "fields":[{"name":"Uploaded at",
+          "value":"<t:${{ steps.current-time.outputs.formattedTime }}:f> (<t:${{ steps.current-time.outputs.formattedTime }}:R>)",
+          "inline":true}]}'
+        last-commit-only: true
